@@ -1,0 +1,24 @@
+name: Deploy Website Prod
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Change this to your desired AWS region
+
+      - name: Deploying Website to Prod
+        run: |
+          aws s3 cp index.html s3://luit-may-2025-blue-static-website-prod --acl public-read
